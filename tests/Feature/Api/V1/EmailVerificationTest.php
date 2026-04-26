@@ -20,7 +20,7 @@ describe('Email Verification', function (): void {
         $verificationUrl = URL::temporarySignedRoute(
             'verification.verify',
             now()->addMinutes(60),
-            ['id' => $user->id, 'hash' => sha1($user->email)]
+            ['id' => $user->id, 'hash' => sha1((string) $user->email)]
         );
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
@@ -45,7 +45,7 @@ describe('Email Verification', function (): void {
         $verificationUrl = URL::temporarySignedRoute(
             'verification.verify',
             now()->addMinutes(60),
-            ['id' => $user->id, 'hash' => sha1($user->email)]
+            ['id' => $user->id, 'hash' => sha1((string) $user->email)]
         );
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token)
@@ -64,7 +64,7 @@ describe('Email Verification', function (): void {
         $verificationUrl = URL::temporarySignedRoute(
             'verification.verify',
             now()->addMinutes(60),
-            ['id' => $user->id, 'hash' => sha1($user->email)]
+            ['id' => $user->id, 'hash' => sha1((string) $user->email)]
         );
 
         $response = $this->postJson($verificationUrl);
