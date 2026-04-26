@@ -1,0 +1,50 @@
+DC = docker compose
+APP_CONT = app
+PHP = $(DC) run --rm $(APP_CONT) php
+COMPOSER = $(DC) run --rm $(APP_CONT) composer
+
+up:
+	$(DC) up -d
+
+down:
+	$(DC) down
+
+build:
+	$(DC) up -d --build
+
+install:
+	$(COMPOSER) install
+	$(PHP) artisan key:generate
+	$(PHP) artisan migrate --seed
+
+lint:
+	$(COMPOSER) run lint
+
+test-full:
+	$(COMPOSER) run test
+
+test:
+	$(PHP) artisan test
+
+phpstan:
+	$(COMPOSER) run test:types
+
+migrate:
+	$(PHP) artisan migrate
+
+fresh:
+	$(PHP) artisan migrate:fresh --seed
+
+tinker:
+	$(PHP) artisan tinker
+
+bash:
+	$(DC) exec -it $(APP_CONT) sh
+
+logs:
+	$(DC) logs -f
+
+clear:
+	$(PHP) artisan cache:clear
+	$(PHP) artisan config:clear
+	$(PHP) artisan route:clear
