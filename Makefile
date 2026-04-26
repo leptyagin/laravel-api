@@ -26,6 +26,12 @@ test-full:
 test:
 	$(PHP) artisan test
 
+test-unit:
+	$(PHP) artisan test tests/Unit
+
+test-feat:
+	$(PHP) artisan test tests/Feature
+
 phpstan:
 	$(COMPOSER) run test:types
 
