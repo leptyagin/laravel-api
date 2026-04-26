@@ -27,12 +27,15 @@ API Documentation: http://localhost:8085/docs/api
 
 ```bash
 make up #Start all services
-make down	#Stop all services
-make test	#Run full test suite (Lint + Types + Unit)
-make lint	#Fix code style (Pint) and apply refactoring (Rector)
+make down #Stop all services
+make test #Run tests (Unit + Feature)
+make test-unit	#Run unit tests
+make test-feat	#Run feature tests
+make test-full	#Run full test suite (Lint + Types + Unit)
+make lint #Fix code style (Pint) and apply refactoring (Rector)
 make fresh #Reset database and run seeds
 make tinker	#Enter Laravel interactive shell
-make bash	#Open terminal inside the laravel-app container
+make bash #Open terminal inside the laravel-app container
 ```
 
 ## Architecture
