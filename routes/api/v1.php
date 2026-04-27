@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\PhotoController;
 use App\Http\Controllers\Api\V1\PreferenceController;
 use App\Http\Controllers\Api\V1\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -26,6 +27,8 @@ Route::middleware(['auth:sanctum', 'throttle:authenticated'])->group(function ()
     Route::post('profile', [ProfileController::class, 'store'])->name('api.v1.profile');
 
     Route::post('preferences', [PreferenceController::class, 'store'])->name('api.v1.preferences');
+
+    Route::post('/photos', [PhotoController::class, 'store']);
 });
 
 Route::middleware('throttle:6,1')->group(function (): void {
