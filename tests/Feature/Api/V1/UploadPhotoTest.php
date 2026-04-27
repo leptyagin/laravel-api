@@ -29,8 +29,10 @@ final class UploadPhotoTest extends TestCase
         ])
             ->assertOk()
             ->assertJsonStructure([
-                'id',
-                'path',
+                'data' => [
+                    'id',
+                    'path',
+                ],
             ]);
 
         Storage::disk('public')->assertExists('photos/'.$file->hashName());
