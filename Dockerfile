@@ -3,6 +3,8 @@ FROM php:8.4-fpm-alpine
 RUN apk add --no-cache \
     libpq-dev \
     libpng-dev \
+    libjpeg-turbo-dev \ 
+    libwebp-dev \
     libzip-dev \
     icu-dev \
     oniguruma-dev \
@@ -13,6 +15,7 @@ RUN apk add --no-cache --virtual .build-deps \
     $PHPIZE_DEPS \
     autoconf \
     build-base \
+    && docker-php-ext-configure gd --with-jpeg --with-webp \
     && docker-php-ext-install pdo_pgsql bcmath gd intl zip opcache pcntl \
     && pecl install redis \
     && docker-php-ext-enable redis \
