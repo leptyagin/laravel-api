@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Api\V1;
 
-use App\DTOs\ProfileDTO;
+use App\DTOs\StoreProfileDTO;
 use App\Enums\City;
 use App\Enums\Gender;
 use App\Enums\Status;
@@ -31,15 +31,15 @@ final class ProfileRequest extends FormRequest
         ];
     }
 
-    public function getDto(): ProfileDTO
+    public function getDto(): StoreProfileDTO
     {
-        return new ProfileDTO(
-            name: $this->input('name'),
-            birthDate: Date::parse($this->input('birth_date')),
-            city: City::from($this->input('city')),
-            gender: Gender::from($this->input('gender')),
-            bio: $this->input('bio'),
-            status: Status::from($this->input('status'))
+        return new StoreProfileDTO(
+            name: $this->validated('name'),
+            birthDate: Date::parse($this->validated('birth_date')),
+            city: City::from($this->validated('city')),
+            gender: Gender::from($this->validated('gender')),
+            bio: $this->validated('bio'),
+            status: Status::from($this->validated('status'))
         );
     }
 }
