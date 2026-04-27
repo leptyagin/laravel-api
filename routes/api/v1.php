@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\PreferenceController;
+use App\Http\Controllers\Api\V1\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('throttle:auth')->group(function (): void {
@@ -21,6 +22,8 @@ Route::middleware(['auth:sanctum', 'throttle:authenticated'])->group(function ()
     Route::post('email/resend', [AuthController::class, 'resendVerificationEmail'])
         ->middleware('throttle:6,1')
         ->name('verification.send');
+
+    Route::post('profile', [ProfileController::class, 'store'])->name('api.v1.profile');
 
     Route::post('preferences', [PreferenceController::class, 'store'])->name('api.v1.preferences');
 });
