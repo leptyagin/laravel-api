@@ -18,6 +18,6 @@ final class PreferenceController extends ApiController
             dto: $request->getDto()
         );
 
-        return response()->json($preference);
+        return $this->success($preference);
     }
 }
