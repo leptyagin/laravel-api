@@ -29,9 +29,11 @@ final class StorePreferenceTest extends TestCase
         $this->postJson('/api/v1/preferences', $data)
             ->assertOk()
             ->assertJson([
-                'gender' => Gender::Female->value,
-                'min_age' => 20,
-                'max_age' => 30,
+                'data' => [
+                    'gender' => Gender::Female->value,
+                    'min_age' => 20,
+                    'max_age' => 30,
+                ],
             ]);
 
         $this->assertDatabaseHas('preferences', [
