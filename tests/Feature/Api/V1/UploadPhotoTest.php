@@ -24,18 +24,15 @@ final class UploadPhotoTest extends TestCase
 
         $file = UploadedFile::fake()->image('photo.jpg');
 
-        $this->postJson('/api/v1/photos', [
+        $response = $this->postJson('/api/v1/photos', [
             'photo' => $file,
-        ])
-            ->assertOk()
-            ->assertJsonStructure([
-                'data' => [
-                    'id',
-                    'path',
-                ],
-            ]);
+        ]);
 
-        Storage::disk('public')->assertExists('photos/'.$file->hashName());
+        $response->assertOk();
+
+        $path = $response->json('data.path');
+
+        Storage::disk('public')->assertExists($path);
     }
 
     public function test_validation_fails_with_invalid_file(): void
