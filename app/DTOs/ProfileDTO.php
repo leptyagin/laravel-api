@@ -7,16 +7,38 @@ namespace App\DTOs;
 use App\Enums\City;
 use App\Enums\Gender;
 use App\Enums\Status;
-use Carbon\Carbon;
+use App\ValueObjects\Age;
 
 final readonly class ProfileDTO
 {
     public function __construct(
+        public int $id,
         public string $name,
-        public Carbon $birthDate,
+        public Age $age,
         public City $city,
-        public Gender $gender,
         public string $bio,
         public Status $status,
+        public ?string $photo,
+        public Gender $gender,
+        public Gender $lookingFor,
+        public Age $partnerMaxAge,
+        public Age $partnerMinAge,
     ) {}
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'age' => $this->age->value,
+            'city' => $this->city->value,
+            'bio' => $this->bio,
+            'status' => $this->status->value,
+            'photo' => $this->photo,
+            'gender' => $this->gender->value,
+            'lookingFor' => $this->lookingFor->value,
+            'partnerMaxAge' => $this->partnerMaxAge->value,
+            'partnerMinAge' => $this->partnerMinAge->value,
+        ];
+    }
 }
