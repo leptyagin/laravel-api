@@ -6,6 +6,7 @@ namespace App\Services;
 
 use App\Contracts\PhotoStorageInterface;
 use App\DTOs\PhotoDTO;
+use App\Events\User\UserProfileChanged;
 use App\Models\Photo;
 use App\Models\User;
 use App\ValueObjects\FileData;
@@ -22,11 +23,10 @@ final readonly class PhotoService
     public function upload(User $user, PhotoDTO $dto): Photo
     {
         $fileData = FileData::fromUploadedFile($dto->file);
-
         $stored = $this->storage->store($fileData);
 
         try {
-            return $this->db->transaction(fn () => Photo::query()->create([
+            $photo = $this->db->transaction(fn() => Photo::query()->create([
                 'user_id' => $user->id,
                 'path' => $stored->path,
             ]));
@@ -34,5 +34,9 @@ final readonly class PhotoService
             $this->storage->delete($stored->path);
             throw $throwable;
         }
+
+        UserProfileChanged::dispatch($user->id);
+
+        return $photo;
     }
 }
