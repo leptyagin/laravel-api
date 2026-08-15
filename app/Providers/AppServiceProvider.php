@@ -5,11 +5,14 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use App\Contracts\PhotoStorageInterface;
+use App\Events\User\UserProfileChanged;
+use App\Listeners\User\InvalidateProfileCache;
 use App\Services\LocalPhotoStorage;
 use App\Services\PhotoService;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Contracts\Filesystem\Factory as FilesystemFactory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 
@@ -29,6 +32,8 @@ final class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->configureRateLimiting();
+
+        Event::listen(UserProfileChanged::class, InvalidateProfileCache::class);
     }
 
     private function configureRateLimiting(): void
