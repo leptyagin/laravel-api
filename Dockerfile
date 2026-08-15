@@ -1,9 +1,9 @@
-FROM php:8.4-fpm-alpine
+FROM dunglas/frankenphp:1-php8.4-alpine
 
 RUN apk add --no-cache \
     libpq-dev \
     libpng-dev \
-    libjpeg-turbo-dev \ 
+    libjpeg-turbo-dev \
     libwebp-dev \
     libzip-dev \
     icu-dev \
@@ -30,6 +30,11 @@ COPY . .
 
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 
-EXPOSE 9000
+RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist \
+    && composer dump-autoload --optimize
 
-CMD ["php-fpm"]
+ENV SERVER_NAME=:80
+
+EXPOSE 80
+
+ENTRYPOINT ["php", "artisan", "octane:frankenphp", "--host=0.0.0.0", "--port=80", "--workers=4", "--max-requests=500"]

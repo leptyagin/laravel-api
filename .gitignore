@@ -32,3 +32,7 @@ CLAUDE.md
 
 # SQLite databases
 database/*.sqlite
+
+**/caddy
+frankenphp
+frankenphp-worker.php
