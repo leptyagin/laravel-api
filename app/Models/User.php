@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\Models\Photo;
-use App\Models\Preference;
-use App\Models\Profile;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -32,14 +29,6 @@ final class User extends Authenticatable implements MustVerifyEmail
     use HasFactory;
     use Notifiable;
 
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
-
     public function profile(): HasOne
     {
         return $this->hasOne(Profile::class);
@@ -53,5 +42,13 @@ final class User extends Authenticatable implements MustVerifyEmail
     public function photos(): HasMany
     {
         return $this->hasMany(Photo::class);
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+        ];
     }
 }

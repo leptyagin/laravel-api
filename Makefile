@@ -18,7 +18,7 @@ install:
 	$(PHP) artisan migrate --seed
 
 lint:
-	$(COMPOSER) run lint
+	docker compose run --rm --entrypoint "" app composer run test:types
 
 test-full:
 	$(COMPOSER) run test
@@ -33,7 +33,7 @@ test-feat:
 	$(PHP) artisan test tests/Feature
 
 phpstan:
-	$(COMPOSER) run test:types
+	docker compose run --rm --entrypoint "" app composer run test:types
 
 migrate:
 	$(PHP) artisan migrate
