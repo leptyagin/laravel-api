@@ -2,13 +2,15 @@
 
 declare(strict_types=1);
 
-namespace App\Services\User;
+namespace App\Services;
 
 use App\DTOs\ProfileDTO;
 use App\Enums\City;
 use App\Enums\Gender;
 use App\Enums\Status;
 use App\Models\User;
+use App\Services\ProfileMapper;
+use App\Services\ProfileQueryService;
 use App\ValueObjects\Age;
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
 
