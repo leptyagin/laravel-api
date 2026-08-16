@@ -1,7 +1,7 @@
 DC = docker compose
 APP_CONT = app
-PHP = $(DC) run --rm $(APP_CONT) php
-COMPOSER = $(DC) run --rm $(APP_CONT) composer
+PHP = $(DC) run --rm --entrypoint "" $(APP_CONT) php
+COMPOSER = $(DC) run --rm --entrypoint "" $(APP_CONT) composer
 
 up:
 	$(DC) up -d
@@ -18,7 +18,7 @@ install:
 	$(PHP) artisan migrate --seed
 
 lint:
-	docker compose run --rm --entrypoint "" app composer run test:types
+	$(COMPOSER) run lint
 
 test-full:
 	$(COMPOSER) run test
@@ -33,7 +33,7 @@ test-feat:
 	$(PHP) artisan test tests/Feature
 
 phpstan:
-	docker compose run --rm --entrypoint "" app composer run test:types
+	$(COMPOSER) run test:types
 
 migrate:
 	$(PHP) artisan migrate

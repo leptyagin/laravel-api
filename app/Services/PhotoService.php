@@ -26,7 +26,7 @@ final readonly class PhotoService
         $stored = $this->storage->store($fileData);
 
         try {
-            $photo = $this->db->transaction(fn() => Photo::query()->create([
+            $photo = $this->db->transaction(fn () => Photo::query()->create([
                 'user_id' => $user->id,
                 'path' => $stored->path,
             ]));
