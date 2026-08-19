@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Listeners\User;
 
+use App\Contracts\ProfileCacheServiceInterface;
 use App\Events\User\UserProfileChanged;
-use App\Services\ProfileCacheService;
 
 final readonly class InvalidateProfileCache
 {
     public function __construct(
-        private ProfileCacheService $cacheService,
+        private ProfileCacheServiceInterface $cacheService,
     ) {}
 
     public function handle(UserProfileChanged $event): void

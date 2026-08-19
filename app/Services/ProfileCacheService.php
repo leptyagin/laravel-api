@@ -4,17 +4,16 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Contracts\ProfileCacheServiceInterface;
 use App\DTOs\ProfileDTO;
 use App\Enums\City;
 use App\Enums\Gender;
 use App\Enums\Status;
 use App\Models\User;
-use App\Services\ProfileMapper;
-use App\Services\ProfileQueryService;
 use App\ValueObjects\Age;
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
 
-final readonly class ProfileCacheService
+final readonly class ProfileCacheService implements ProfileCacheServiceInterface
 {
     private const string PREFIX = 'user_profile:';
 

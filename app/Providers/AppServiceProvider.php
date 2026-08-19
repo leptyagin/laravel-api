@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use App\Contracts\PhotoStorageInterface;
+use App\Contracts\ProfileCacheServiceInterface;
 use App\Events\User\UserProfileChanged;
 use App\Listeners\User\InvalidateProfileCache;
 use App\Services\LocalPhotoStorage;
 use App\Services\PhotoService;
+use App\Services\ProfileCacheService;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Contracts\Filesystem\Factory as FilesystemFactory;
 use Illuminate\Http\Request;
@@ -27,6 +29,11 @@ final class AppServiceProvider extends ServiceProvider
                 disk: config('filesystems.photo_disk', 'public'),
                 directory: config('filesystems.photo_dir', 'photos'),
             ));
+
+        $this->app->bind(
+            ProfileCacheServiceInterface::class,
+            ProfileCacheService::class,
+        );
     }
 
     public function boot(): void
