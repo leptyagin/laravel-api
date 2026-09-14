@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Exceptions\ApiException;
 use App\Http\Middleware\EnsureEmailVerified;
 use App\Http\Middleware\ForceJsonResponse;
 use App\Http\Middleware\LogApiRequests;
@@ -33,6 +34,7 @@ return Application::configure(basePath: dirname(__DIR__))
             if ($request->is('api/*')) {
 
                 $status = match (true) {
+                    $e instanceof ApiException => $e->statusCode,
                     $e instanceof ValidationException => 422,
                     $e instanceof AuthenticationException => 401,
                     $e instanceof AuthorizationException => 403,
