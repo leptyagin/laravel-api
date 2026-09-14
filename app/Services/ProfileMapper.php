@@ -5,9 +5,6 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\DTOs\ProfileDTO;
-use App\Enums\City;
-use App\Enums\Gender;
-use App\Enums\Status;
 use App\Models\User;
 use App\ValueObjects\Age;
 use DomainException;
@@ -25,12 +22,12 @@ final class ProfileMapper
             id: $user->id,
             name: $user->name,
             age: Age::fromBirthDate($profile->birth_date),
-            city: City::from($profile->city),
+            city: $profile->city,
             bio: $profile->bio ?? '',
-            status: Status::from($profile->status),
+            status: $profile->status,
             photo: $user->photos->first()?->url,
-            gender: Gender::from($profile->gender),
-            lookingFor: Gender::from($prefs->looking_for),
+            gender: $profile->gender,
+            lookingFor: $prefs->gender,
             partnerMaxAge: new Age($prefs->max_age),
             partnerMinAge: new Age($prefs->min_age),
         );
