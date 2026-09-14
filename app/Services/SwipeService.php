@@ -41,7 +41,7 @@ final readonly class SwipeService
         for ($attempt = 1; $attempt <= self::MAX_INSERT_RETRIES; $attempt++) {
             try {
                 return $this->db->transaction(
-                    fn(): SwipeResultDTO => $this->processSwipe($actor, $target, $direction)
+                    fn (): SwipeResultDTO => $this->processSwipe($actor, $target, $direction)
                 );
             } catch (UniqueConstraintViolationException) {
                 continue;
