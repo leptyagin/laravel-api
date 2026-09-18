@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Exceptions;
 
-use DomainException;
+use Exception;
 
-abstract class ApiException extends DomainException
+abstract class ApiException extends Exception
 {
     public function __construct(string $message, public readonly int $statusCode)
     {
