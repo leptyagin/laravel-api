@@ -7,6 +7,7 @@ namespace App\Services;
 use App\DTOs\SwipeResultDTO;
 use App\Enums\SwipeDirection;
 use App\Events\UsersMatched;
+use App\Events\UserSwiped;
 use App\Exceptions\AlreadySwipedException;
 use App\Exceptions\CannotSwipeSelfException;
 use App\Models\Swipe;
@@ -28,6 +29,8 @@ final readonly class SwipeService
         throw_if($actor->id === $target->id, CannotSwipeSelfException::class);
 
         $result = $this->attemptSwipeWithRetry($actor, $target, $direction);
+
+        UserSwiped::dispatch($actor->id, $target->id);
 
         if ($result->matched) {
             UsersMatched::dispatch($result->swipe);
