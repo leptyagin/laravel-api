@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\FeedController;
 use App\Http\Controllers\Api\V1\PhotoController;
 use App\Http\Controllers\Api\V1\PreferenceController;
 use App\Http\Controllers\Api\V1\ProfileController;
@@ -33,6 +34,8 @@ Route::middleware(['auth:sanctum', 'throttle:authenticated'])->group(function ()
 
     Route::post('swipe/{profile}/like', [SwipeController::class, 'like'])->name('api.v1.swipe.like');
     Route::post('swipe/{profile}/dislike', [SwipeController::class, 'dislike'])->name('api.v1.swipe.dislike');
+
+    Route::get('feed', [FeedController::class, 'index'])->name('api.v1.feed');
 });
 
 Route::middleware('throttle:6,1')->group(function (): void {
