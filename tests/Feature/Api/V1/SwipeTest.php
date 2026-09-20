@@ -4,10 +4,16 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Api\V1;
 
+use App\Contracts\FeedCacheServiceInterface;
+use App\Events\UsersMatched;
 use App\Models\Swipe;
 use App\Models\User;
+use Closure;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Exceptions;
 use Laravel\Sanctum\Sanctum;
+use RuntimeException;
 use Tests\TestCase;
 
 final class SwipeTest extends TestCase
@@ -100,6 +106,43 @@ final class SwipeTest extends TestCase
             'user_id_1' => min($userA->id, $userB->id),
             'user_id_2' => max($userA->id, $userB->id),
         ]);
+    }
+
+    public function test_swipe_and_match_survive_a_feed_cache_failure(): void
+    {
+        $userA = User::factory()->create();
+        $userB = User::factory()->create();
+
+        Sanctum::actingAs($userA);
+        $this->postJson("/api/v1/swipe/{$userB->id}/like")->assertOk();
+
+        Exceptions::fake();
+        Event::fake([UsersMatched::class]);
+        $this->app->bind(FeedCacheServiceInterface::class, fn (): FeedCacheServiceInterface => new class implements FeedCacheServiceInterface
+        {
+            public function remember(int $userId, Closure $rebuild): array
+            {
+                throw new RuntimeException('redis is down');
+            }
+
+            public function removeCandidate(int $userId, int $candidateId): void
+            {
+                throw new RuntimeException('redis is down');
+            }
+
+            public function invalidate(int $userId): void
+            {
+                throw new RuntimeException('redis is down');
+            }
+        });
+
+        Sanctum::actingAs($userB);
+        $this->postJson("/api/v1/swipe/{$userA->id}/like")
+            ->assertOk()
+            ->assertJson(['data' => ['matched' => true]]);
+
+        Event::assertDispatched(UsersMatched::class);
+        Exceptions::assertReported(RuntimeException::class);
     }
 
     public function test_guest_cannot_swipe(): void
