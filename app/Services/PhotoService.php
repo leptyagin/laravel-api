@@ -26,10 +26,15 @@ final readonly class PhotoService
         $stored = $this->storage->store($fileData);
 
         try {
-            $photo = $this->db->transaction(fn () => Photo::query()->create([
-                'user_id' => $user->id,
-                'path' => $stored->path,
-            ]));
+            $photo = $this->db->transaction(function () use ($user, $stored): Photo {
+                User::query()->whereKey($user->id)->lockForUpdate()->value('id');
+
+                return Photo::query()->create([
+                    'user_id' => $user->id,
+                    'path' => $stored->path,
+                    'position' => (int) Photo::query()->where('user_id', $user->id)->max('position') + 1,
+                ]);
+            });
         } catch (Throwable $throwable) {
             $this->storage->delete($stored->path);
             throw $throwable;

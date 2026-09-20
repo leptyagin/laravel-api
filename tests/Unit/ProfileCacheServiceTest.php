@@ -107,14 +107,23 @@ final class ProfileCacheServiceTest extends TestCase
         $this->assertSame('Updated bio', $fresh->bio);
     }
 
-    /**
-     * capture the current behavior
-     * @todo need to be fixed to assertNotNull($dto->photo) later
-     */
-    public function test_photo_is_still_null_even_when_user_has_an_uploaded_photo(): void
+    public function test_main_photo_is_returned_as_url(): void
     {
         $user = $this->createUserWithCompleteProfile();
-        $user->photos()->create(['path' => 'photos/avatar.jpg']);
+        $user->photos()->create(['path' => 'photos/second.jpg', 'position' => 2]);
+        $user->photos()->create(['path' => 'photos/avatar.jpg', 'position' => 1]);
+        $service = $this->app->make(ProfileCacheServiceInterface::class);
+
+        $dto = $service->get($user->id);
+
+        $this->assertNotNull($dto->photo);
+        $this->assertStringEndsWith('photos/avatar.jpg', $dto->photo);
+    }
+
+    public function test_photo_is_null_when_no_photo_has_the_main_position(): void
+    {
+        $user = $this->createUserWithCompleteProfile();
+        $user->photos()->create(['path' => 'photos/second.jpg', 'position' => 2]);
         $service = $this->app->make(ProfileCacheServiceInterface::class);
 
         $dto = $service->get($user->id);
