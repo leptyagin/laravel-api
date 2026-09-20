@@ -52,6 +52,33 @@ final class StoreProfileTest extends TestCase
         ]);
     }
 
+    public function test_user_must_be_between_18_and_100_years_old(): void
+    {
+        Sanctum::actingAs(User::factory()->create());
+
+        $payload = [
+            'name' => 'John Doe',
+            'city' => City::Montevideo->value,
+            'gender' => Gender::Male->value,
+            'bio' => 'Hello',
+            'status' => Status::Active->value,
+        ];
+
+        $this->postJson('/api/v1/profile', [...$payload, 'birth_date' => today()->subYears(18)->addDay()->toDateString()])
+            ->assertStatus(422)
+            ->assertJsonValidationErrors(['birth_date']);
+
+        $this->postJson('/api/v1/profile', [...$payload, 'birth_date' => today()->subYears(101)->toDateString()])
+            ->assertStatus(422)
+            ->assertJsonValidationErrors(['birth_date']);
+
+        $this->postJson('/api/v1/profile', [...$payload, 'birth_date' => today()->subYears(18)->toDateString()])
+            ->assertOk();
+
+        $this->postJson('/api/v1/profile', [...$payload, 'birth_date' => today()->subYears(101)->addDay()->toDateString()])
+            ->assertOk();
+    }
+
     public function test_user_can_update_profile(): void
     {
         $user = User::factory()->create();

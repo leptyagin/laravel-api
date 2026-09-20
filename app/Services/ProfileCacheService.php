@@ -27,7 +27,7 @@ final readonly class ProfileCacheService implements ProfileCacheServiceInterface
     {
         $data = $this->cache->remember(
             $this->key($userId),
-            60 * 60 * 10,
+            (int) config('profile.cache_ttl'),
             function () use ($userId): array {
                 $user = $this->query->getById($userId);
 

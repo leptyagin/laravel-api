@@ -23,7 +23,7 @@ final class ProfileRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'min:4', 'max:40'],
-            'birth_date' => ['required', 'date', 'before:today'],
+            'birth_date' => ['required', 'date', 'before_or_equal:-18 years', 'after:-101 years'],
             'city' => ['required', new Enum(City::class)],
             'gender' => ['required', new Enum(Gender::class)],
             'bio' => ['required', 'string', 'min:1', 'max:500'],
