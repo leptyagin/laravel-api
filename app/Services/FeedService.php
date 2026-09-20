@@ -55,7 +55,7 @@ final readonly class FeedService
     }
 
     /**
-     * @param  list<int> $candidateIds
+     * @param  list<int>  $candidateIds
      * @return list<ProfileDTO>
      */
     private function loadProfiles(User $viewer, array $candidateIds): array

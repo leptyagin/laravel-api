@@ -94,7 +94,7 @@ final readonly class FeedCacheService implements FeedCacheServiceInterface
     }
 
     /**
-     * @param list<int> $ids
+     * @param  list<int>  $ids
      */
     private function store(int $userId, array $ids, int $expiresAt): void
     {
@@ -110,7 +110,7 @@ final readonly class FeedCacheService implements FeedCacheServiceInterface
     /**
      * @template T
      *
-     * @param Closure(): T $callback
+     * @param  Closure(): T  $callback
      * @return T
      */
     private function withLock(int $userId, Closure $callback): mixed

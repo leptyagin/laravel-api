@@ -125,7 +125,7 @@ final class FeedCacheServiceTest extends TestCase
     }
 
     /**
-     * @param list<int> $ids
+     * @param  list<int>  $ids
      * @return list<int>
      */
     private function remember(array $ids): array

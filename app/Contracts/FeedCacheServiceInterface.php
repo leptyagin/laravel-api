@@ -9,7 +9,7 @@ use Closure;
 interface FeedCacheServiceInterface
 {
     /**
-     * @param Closure(): list<int> $rebuild
+     * @param  Closure(): list<int>  $rebuild
      * @return list<int>
      */
     public function remember(int $userId, Closure $rebuild): array;

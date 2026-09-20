@@ -7,7 +7,7 @@ namespace App\DTOs;
 final readonly class FeedPageDTO
 {
     /**
-     * @param list<ProfileDTO> $items
+     * @param  list<ProfileDTO>  $items
      */
     public function __construct(
         public array $items,

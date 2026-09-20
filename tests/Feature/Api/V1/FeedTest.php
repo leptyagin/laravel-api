@@ -384,7 +384,7 @@ final class FeedTest extends TestCase
     }
 
     /**
-     * @param TestResponse<JsonResponse> $response
+     * @param  TestResponse<JsonResponse>  $response
      * @return list<int>
      */
     private function idsOf(TestResponse $response): array
